@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.repositories.user_repo import get_user_by_email, create_user
-from app.core.security import get_password_hash
+from app.core.security import hash_password
 from app.models.user import User
 from app.schemas.user import UserCreate
 
@@ -11,7 +11,7 @@ def register_user(db: Session, user_in: UserCreate):
 
     user = user(
         email = user_in.email,
-        hashed_password = get_password_hash(user_in.password),
+        hashed_password = hash_password(user.password),
     )
 
     return create_user(db, user)
