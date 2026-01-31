@@ -1,8 +1,4 @@
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
-
-from app.models.user import User
-from app.models.category import Category
-from app.models.product import Product
-from app.models.product_variant import ProductVariant
+class Base(DeclarativeBase):
+    pass
