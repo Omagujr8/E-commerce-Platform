@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.category import Category
+from app.models.category import Category
 from app.schemas.category import CategoryCreate
 from app.repositories.category_repo import create_category, get_all_categories
 
