@@ -18,9 +18,9 @@ def create_or_replace_inventory(db: Session, data: InventoryCreate):
         return update_inventory(db, existing)
 
     inv = Inventory(
-        variant_id = data.variant_id
-        stock_quantity = data.stock_quantity
-        low_stock_threshold = data.low_stock_threshold
+        variant_id = data.variant_id,
+        stock_quantity = data.stock_quantity,
+        low_stock_threshold = data.low_stock_threshold,
     )
     return create_inventory(db, inv)
 

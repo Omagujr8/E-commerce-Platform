@@ -27,7 +27,7 @@ def get_inventory(variant_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code = 400, detail = "Inventory not found")
     return inv
 
-@router.patch("/{variant_id}". response_model= InventoryResponse)
+@router.patch("/{variant_id}", response_model= InventoryResponse)
 def update_inventory(variant_id: int, data: InventoryUpdate, db: Session = Depends(get_db)):
     try:
         return update_inventory_setttings(db, variant_id, data)
