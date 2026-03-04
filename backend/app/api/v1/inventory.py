@@ -5,7 +5,7 @@ from app.core.dependencies  import get_db
 from app.schemas.inventory import InventoryCreate, InventoryUpdate, InventoryResponse
 from app.services.inventory_service import (
     create_or_replace_inventory,
-    update_inventory_setttings,
+    update_inventory_settings,
     increase_stock,
     decrease_stock,
 )
