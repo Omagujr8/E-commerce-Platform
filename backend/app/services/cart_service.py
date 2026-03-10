@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 from app.utils.cache import redis_client
 from app.repositories.inventory_repo import get_inventory_by_variant_id
 
-from backend.app.schemas.cart import CartResponse
+#from app.schemas.cart import CartResponse
 
 
-def _cart_key(user_id: id) -> str:
+def _cart_key(user_id: int  ) -> str:
     return f"cart_{user_id}"
 
-# getting the item the cart
-def get_cart(db: Session, user_id: id):
+# getting the item in the cart
+def get_cart(db: Session, user_id: int):
     key = _cart_key(user_id)
     raw = redis_client.get(key)
 
@@ -26,7 +26,7 @@ def get_cart(db: Session, user_id: id):
     return {"user_id": user_id, "items": items}
 
 # Adding item to cart
-def add_cart(db: Session, user_id: int, variant_id: int, quantity: int):
+def add_to_cart(db: Session, user_id: int, variant_id: int, quantity: int):
     if quantity <= 0:
         raise ValueError("Quantity must be greater than 0")
 

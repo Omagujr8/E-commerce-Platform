@@ -8,6 +8,7 @@ from app.services.cart_service import (
     add_to_cart,
     update_cart_item,
     remove_from_cart,
+    clear_cart
 )
 from app.auth.dependencies import get_current_user
 
