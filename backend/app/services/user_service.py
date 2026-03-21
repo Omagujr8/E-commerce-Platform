@@ -9,10 +9,10 @@ def register_user(db: Session, user_in: UserCreate):
     if existing:
         raise ValueError("User already exists")
 
-    user = user(
-        email = user_in.email,
-        hashed_password = hash_password(user.password),
+    new_user = User(
+        email=user_in.email,
+        hashed_password=hash_password(user_in.password),
     )
 
-    return create_user(db, user)
+    return create_user(db, new_user)
 

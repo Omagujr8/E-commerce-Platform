@@ -9,7 +9,7 @@ class OrderItemResponse(BaseModel):
     price: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class OrderResponse(BaseModel):
@@ -20,4 +20,4 @@ class OrderResponse(BaseModel):
     items: List[OrderItemResponse]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
