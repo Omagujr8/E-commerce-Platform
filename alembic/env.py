@@ -9,6 +9,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# Ensure all model modules are imported so SQLAlchemy metadata is up-to-date.
+from app.models import user, product, category, order, order_item, inventory, product_variant, payment, review, shipment, discount
+
 target_metadata = Base.metadata
 
 

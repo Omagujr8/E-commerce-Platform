@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     AWS_S3_BUCKET: str
     AWS_REGION: str
 
-    STRIPE_SECRET_KEY: str
-    STRIPE_WEBHOOK_SECRET: str
+    PAYSTACK_SECRET_KEY: str
+    PAYSTACK_PUBLIC_KEY: str
 
     class Config:
         env_file = ".env"

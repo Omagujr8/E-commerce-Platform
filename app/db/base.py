@@ -1,14 +1,6 @@
-#from sqlalchemy.orm import DeclarativeBase
-from app.models.order import Order
-from app.models.order_item import OrderItem
-from app.models.inventory import Inventory
-from app.models.product_variant import ProductVariant
 from app.db.session import Base
-from app.models.user import User
-from app.models.product import Product
-from app.models.category import Category
-from app.models.payment import Payment
 
-#class Base(DeclarativeBase):
-#    pass
+# app/db/base.py provides the declarative Base for SQLAlchemy models.
+# Do NOT import model classes here to avoid circular import issues.
+
 

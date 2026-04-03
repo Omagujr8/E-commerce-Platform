@@ -15,6 +15,6 @@ class Payment(Base):
 
     status = Column(String, default="pending")
 
-    payment_intent_id = Column(String, unique=True)
+    reference = Column(String, unique=True, index=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())

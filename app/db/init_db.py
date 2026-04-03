@@ -4,7 +4,9 @@ from sqlalchemy.exc import OperationalError
 
 from app.db.base import Base
 from app.db.session import engine
-from app.models import user
+
+# Import all models exactly once in startup so Base.metadata is fully populated
+from app.models import user, product, category, order, order_item, inventory, product_variant, payment, review, shipment, discount
 
 
 def init_db():
