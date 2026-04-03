@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     PAYSTACK_SECRET_KEY: str
     PAYSTACK_PUBLIC_KEY: str
 
+
     class Config:
         env_file = ".env"
 
