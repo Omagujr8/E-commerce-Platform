@@ -9,7 +9,7 @@ def create_payment(db: Session, payment: Payment):
     return payment
 
 
-def get_payment_by_intent(db: Session, intent_id: str):
+def get_payment_by_reference(db: Session, reference: str):
     return db.query(Payment).filter(
-        Payment.payment_intent_id == intent_id
+        Payment.reference == reference
     ).first()

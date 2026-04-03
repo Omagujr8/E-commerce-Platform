@@ -6,4 +6,6 @@ class PaymentCreate(BaseModel):
 
 
 class PaymentResponse(BaseModel):
-    client_secret: str
+    authorization_url: str
+    reference: str
+

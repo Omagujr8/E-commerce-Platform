@@ -1,32 +1,36 @@
-import stripe
+import hmac
+import hashlib
+import json
+
 from fastapi import Request, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.repositories.payment_repo import get_payment_by_intent
+from app.repositories.payment_repo import get_payment_by_reference
 from app.repositories.order_repo import get_order_by_id
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
-
-async def handle_stripe_webhook(request: Request, db: Session):
+async def handle_paystack_webhook(request: Request, db: Session):
 
     payload = await request.body()
-    sig_header = request.headers.get("stripe-signature")
+    signature = request.headers.get("x-paystack-signature")
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload,
-            sig_header,
-            settings.STRIPE_WEBHOOK_SECRET
-        )
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid webhook")
+    computed_hash = hmac.new(
+        settings.PAYSTACK_SECRET_KEY.encode(),
+        payload,
+        hashlib.sha512
+    ).hexdigest()
 
-    if event["type"] == "payment_intent.succeeded":
-        intent = event["data"]["object"]
+    if computed_hash != signature:
+        raise HTTPException(status_code=400, detail="Invalid signature")
 
-        payment = get_payment_by_intent(db, intent["id"])
+    event = json.loads(payload)
+
+    if event["event"] == "charge.success":
+
+        reference = event["data"]["reference"]
+
+        payment = get_payment_by_reference(db, reference)
 
         if payment:
             payment.status = "SUCCESS"
