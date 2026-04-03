@@ -6,9 +6,16 @@ from app.repositories.order_repo import create_order
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product_variant import ProductVariant
+from app.repositories.address_repo import get_address_by_id
+from app.services.shipping_service import calculate_shipping
 
 
-def checkout(db: Session, user_id: int):
+def checkout(db: Session, user_id: int, address_id: int):
+
+    address = get_address_by_id(db, address_id)
+
+    if not address:
+        raise ValueError("Invalid address")
 
     cart = get_cart(db, user_id)
 
@@ -19,14 +26,13 @@ def checkout(db: Session, user_id: int):
     total_amount = 0
 
     for item in cart["items"]:
-
         variant_id = item["variant_id"]
         quantity = item["quantity"]
 
         inv = get_inventory_by_variant_id(db, variant_id)
 
         if not inv or inv.stock_quantity < quantity:
-            raise ValueError(f"Insufficient stock for variant {variant_id}")
+            raise ValueError("Insufficient stock")
 
         variant = db.query(ProductVariant).filter(
             ProductVariant.id == variant_id
@@ -44,13 +50,16 @@ def checkout(db: Session, user_id: int):
             )
         )
 
-        # Deduct stock
         inv.stock_quantity -= quantity
+
+    shipping_cost = calculate_shipping(address.state, total_amount)
 
     order = Order(
         user_id=user_id,
-        total_amount=total_amount,
-        status="PENDING_PAYMENT"
+        total_amount=total_amount + shipping_cost,
+        status="PENDING_PAYMENT",
+        address_id=address.id,
+        shipping_cost=shipping_cost
     )
 
     created = create_order(db, order, items)

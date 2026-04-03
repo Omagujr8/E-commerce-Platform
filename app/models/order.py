@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.session import Base
+from sqlalchemy import Boolean
 
 
 class Order(Base):
@@ -10,6 +11,14 @@ class Order(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    address_id = Column(Integer, ForeignKey("addresses.id"))
+
+    shipping_cost = Column(Float, default=0)
+
+    is_delivered = Column(Boolean, default=False)
+
+    tracking_code = Column(String, nullable=True)
 
     status = Column(String, default="CREATED")
 
