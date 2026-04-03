@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 class CheckoutRequest(BaseModel):
     address_id: int
+    discount_code: str | None = None
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -20,7 +21,12 @@ def create_order(
     user=Depends(get_current_user)
 ):
     try:
-        return checkout(db, user.id)
+        return checkout(
+            db,
+            user.id,
+            data.address_id,
+            data.discount_code
+        )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

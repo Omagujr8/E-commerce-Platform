@@ -8,9 +8,10 @@ from app.models.order_item import OrderItem
 from app.models.product_variant import ProductVariant
 from app.repositories.address_repo import get_address_by_id
 from app.services.shipping_service import calculate_shipping
+from app.repositories.discount_repo import get_discount_by_code, is_valid_discount
+from app.services.discount_service import apply_discount
 
-
-def checkout(db: Session, user_id: int, address_id: int):
+def checkout(db: Session, user_id: int, address_id: int, discount_code: str = None):
 
     address = get_address_by_id(db, address_id)
 
@@ -61,6 +62,18 @@ def checkout(db: Session, user_id: int, address_id: int):
         address_id=address.id,
         shipping_cost=shipping_cost
     )
+
+    discount_amount = 0
+
+    if discount_code:
+        discount = get_discount_by_code(db, discount_code)
+
+        if not is_valid_discount(discount):
+            raise ValueError("Invalid or expired discount code")
+
+        new_total = apply_discount(total_amount, discount)
+        discount_amount = total_amount - new_total
+        total_amount = new_total
 
     created = create_order(db, order, items)
 
